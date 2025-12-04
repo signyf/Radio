@@ -5,21 +5,24 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// --- 📻 41个全球精选 HTTPS 高稳电台 ---
+// --- 📻 40个全球精选 HTTPS 高稳电台 ---
 const STATIONS = [
-  // --- 🇰🇷 K-Pop (韩国流行) ---
-  { name: "Big B Radio - KPOP", genre: "K-Pop Hits", url: "https://stream.bigbradio.net/kpop" },
-  { name: "K-Pop Gayo", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
-  { name: "Aewen Radio (K-Pop)", genre: "K-Pop", url: "https://aewen.com/kpop-mobile" },
-  { name: "Kpopway Radio", genre: "K-Pop/OST", url: "https://radio.kpopway.com/stream" }, 
-  { name: "Korean Pop", genre: "K-Pop", url: "https://stream.zeno.fm/4q553930808uv" },
+  // --- 🌟 特别推荐 (Featured) ---
+  { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
 
-  // --- 🇯🇵 J-Pop/Anime (日本流行/动漫) ---
-  { name: "Big B Radio - JPOP", genre: "J-Pop Hits", url: "https://stream.bigbradio.net/jpop" },
+  // --- 🇰🇷 韩国流行 (New K-Pop) ---
+  { name: "Big B Radio - KPOP", genre: "K-Pop Hits", url: "https://stream.bigbradio.net/kpop" },
+  { name: "Listen.moe (K-Pop)", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
+  { name: "Kpopway Radio", genre: "K-Pop", url: "https://icecast.kpopway.com:8000/stream" },
+  { name: "Generasi KPOP", genre: "K-Pop", url: "https://stream.zeno.fm/r3k1mv0q208uv" },
+  { name: "Seoul Community Radio", genre: "Underground", url: "https://seoulcommunityradio.out.airtime.pro/seoulcommunityradio_a" },
+
+  // --- 🇯🇵 日本流行/动漫 (New J-Pop) ---
   { name: "Listen.moe (J-Pop)", genre: "J-Pop/Anime", url: "https://listen.moe/stream" },
-  { name: "J-Pop Powerplay", genre: "J-Pop", url: "https://kathy.torontocast.com:3060/;" },
+  { name: "Big B Radio - JPOP", genre: "J-Pop Hits", url: "https://stream.bigbradio.net/jpop" },
+  { name: "Vocaloid Radio", genre: "Vocaloid", url: "https://curtis.torontocast.com:2096/stream" },
   { name: "AnimeNfo Radio", genre: "Anime OST", url: "https://momori.animenfo.com:8000/stream" },
-  { name: "Japan Hits", genre: "J-Pop", url: "https://igor.torontocast.com:1025/;" },
+  { name: "Japan Hits (Asia DREAM)", genre: "J-Pop", url: "https://igor.torontocast.com:1025/;" },
 
   // --- 🇭🇰/🇨🇳 中文精选 (Chinese/HK) ---
   { name: "RTHK Radio 1 (香港)", genre: "News/Talk", url: "https://stm1.rthk.hk/radio1" }, 
@@ -59,7 +62,6 @@ const STATIONS = [
 
   // --- 🌍 其他 (Misc) ---
   { name: "NASA Radio", genre: "Space", url: "https://thirdrock.streamguys1.com/thirdrock.mp3" },
-  { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
   { name: "Disney Hits", genre: "Kids", url: "https://streaming.radio.co/s5d59529b4/listen" }
 ];
 
