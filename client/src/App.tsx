@@ -5,63 +5,61 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// --- 📻 56个全球精选电台 (中国网络优化版) ---
-// 筛选标准：HTTPS + 音乐为主 (避开新闻台) + 常用流媒体协议
+// --- 📻 56个全球精选 HTTPS 高稳电台 (GitHub 精选版) ---
 const STATIONS = [
   // --- 🌟 特别推荐 (Featured) ---
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
 
-  // --- 🇨🇳/🇭🇰/🇹🇼 华语精选 (Chinese Pop) ---
-  { name: "Apple FM (香港)", genre: "Mandopop", url: "https://janus.cdnstream1.com/appleradio" },
-  { name: "RTHK Radio 1 (香港)", genre: "Cantonese", url: "https://stm1.rthk.hk/radio1" }, 
-  { name: "RTHK Radio 2 (香港)", genre: "CantoPop", url: "https://stm1.rthk.hk/radio2" },
-  { name: "Hit FM (台湾)", genre: "Mandopop", url: "https://stream.rcs.revma.com/k53q2312w98uv" },
-  { name: "181.fm Chinese", genre: "Chinese Pop", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" },
-  { name: "Asia Hits", genre: "Asian Mix", url: "https://jenny.torontocast.com:8134/stream" },
-  { name: "Chinese Music World", genre: "Classic", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" },
-  { name: "D100 PBS", genre: "Talk/Music", url: "https://zv.d100.net/pbs.mp3" },
-  { name: "CNR-1 (央广之声)", genre: "News", url: "https://lhttp.qtfm.cn/live/499/64k.mp3" }, // 尝试添加一个国内HTTPS源(如果可用)
-  
-  // --- 🇯🇵/🇰🇷 日韩流行 (J-Pop & K-Pop) ---
-  { name: "Big B Radio - KPOP", genre: "K-Pop", url: "https://stream.bigbradio.net/kpop" },
+  // --- 🇰🇷 韩国流行 (K-Pop) - [Updated] ---
+  { name: "Big B Radio - KPOP", genre: "K-Pop Hits", url: "https://stream.bigbradio.net/kpop" },
   { name: "Listen.moe (K-Pop)", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
   { name: "Kpopway Radio", genre: "K-Pop", url: "https://icecast.kpopway.com:8000/stream" },
   { name: "Generasi KPOP", genre: "K-Pop", url: "https://stream.zeno.fm/r3k1mv0q208uv" },
-  { name: "Big B Radio - JPOP", genre: "J-Pop", url: "https://stream.bigbradio.net/jpop" },
+  { name: "Seoul Community Radio", genre: "Underground", url: "https://seoulcommunityradio.out.airtime.pro/seoulcommunityradio_a" },
+
+  // --- 🇯🇵 日本流行/动漫 (J-Pop & Anime) - [Updated] ---
   { name: "Listen.moe (J-Pop)", genre: "J-Pop/Anime", url: "https://listen.moe/stream" },
+  { name: "Big B Radio - JPOP", genre: "J-Pop Hits", url: "https://stream.bigbradio.net/jpop" },
   { name: "Vocaloid Radio", genre: "Vocaloid", url: "https://curtis.torontocast.com:2096/stream" },
   { name: "AnimeNfo Radio", genre: "Anime OST", url: "https://momori.animenfo.com:8000/stream" },
   { name: "Japan Hits", genre: "J-Pop", url: "https://igor.torontocast.com:1025/;" },
-  { name: "J-Idols Project", genre: "Idols", url: "https://kathy.torontocast.com:3560/;" },
 
-  // --- ☕ 专注/放松 (Chill/Lo-Fi/Ambient) ---
+  // --- 🇭🇰/🇨🇳 中文精选 (Chinese) ---
+  { name: "RTHK Radio 1 (香港)", genre: "Cantonese", url: "https://stm1.rthk.hk/radio1" }, 
+  { name: "RTHK Radio 2 (香港)", genre: "CantoPop", url: "https://stm1.rthk.hk/radio2" }, 
+  { name: "Apple FM (香港)", genre: "Mandopop", url: "https://janus.cdnstream1.com/appleradio" }, 
+  { name: "181.fm Chinese", genre: "Chinese Pop", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" }, 
+  { name: "Asia Hits", genre: "Asian Mix", url: "https://jenny.torontocast.com:8134/stream" },
+
+  // --- 🇺🇸/🇬🇧 欧美流行 (Top 40 & Hits) ---
+  { name: "Capital FM London", genre: "Top 40", url: "https://media-ssl.musicradio.com/CapitalUK" },
+  { name: "Heart London", genre: "Pop/AC", url: "https://media-ssl.musicradio.com/HeartLondon" },
+  { name: "Virgin Radio UK", genre: "Pop/Rock", url: "https://radio.virginradio.co.uk/stream" },
+  { name: "Power 181", genre: "Top 40", url: "https://listen.181fm.com/181-power_128k.mp3" },
+  { name: "HITS 105", genre: "Hits", url: "https://ais-sa1.streamon.fm/7005_64k.mp3" },
+  { name: "100hitz - Hot Hitz", genre: "Hot Hits", url: "https://pureplay.cdnstream1.com/6050_64.aac" },
+
+  // --- 🕰️ 怀旧金曲 (Retro & Oldies) ---
+  { name: "Awesome 80s", genre: "80s Hits", url: "https://listen.181fm.com/181-awesome80s_128k.mp3" },
+  { name: "Star 90s", genre: "90s Hits", url: "https://listen.181fm.com/181-star90s_128k.mp3" },
+  { name: "Gold Radio UK", genre: "Oldies", url: "https://media-ssl.musicradio.com/Gold" },
+  { name: "Beatles Radio", genre: "The Beatles", url: "https://stream.zeno.fm/v3p69335228uv" },
+
+  // --- ☕ 氛围/专注 (Chill & Lo-Fi) ---
   { name: "Lofi Girl Radio", genre: "Lo-Fi", url: "https://play.streamafrica.net/lofigirl" },
   { name: "SomaFM: Groove Salad", genre: "Ambient", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
   { name: "Radio Paradise", genre: "Eclectic", url: "https://stream.radioparadise.com/mp3-128" },
   { name: "Radio Paradise Mellow", genre: "Chill", url: "https://stream.radioparadise.com/mellow-128" },
   { name: "Smooth Chill", genre: "Chillout", url: "https://media-ssl.musicradio.com/SmoothChill" },
-  { name: "SomaFM: Deep Space", genre: "Space/Drone", url: "https://ice1.somafm.com/deepspaceone-128-mp3" },
+  { name: "SomaFM: Deep Space", genre: "Drone/Space", url: "https://ice1.somafm.com/deepspaceone-128-mp3" },
   { name: "Sleep Radio", genre: "Sleep", url: "https://streams.ilovemusic.de/iloveradio17.mp3" },
-  { name: "Birdsong FM", genre: "Nature", url: "https://stream.zeno.fm/9k928923308uv" }, // Fallback nature
-  { name: "Costa Del Mar", genre: "Chillout", url: "https://stream.zeno.fm/f3wvbbqmdg8uv" }, // Chillhop backup
-  { name: "Piano Solo", genre: "Piano", url: "https://pianosolo.stream.publicradio.org/pianosolo.mp3" },
 
-  // --- 🇺🇸/🇬🇧 欧美流行 (Western Hits) ---
-  { name: "Power 181", genre: "Top 40", url: "https://listen.181fm.com/181-power_128k.mp3" },
-  { name: "HITS 105", genre: "Hits", url: "https://ais-sa1.streamon.fm/7005_64k.mp3" },
-  { name: "100hitz - Hot Hitz", genre: "Hot Hits", url: "https://pureplay.cdnstream1.com/6050_64.aac" },
-  { name: "Capital FM London", genre: "Top 40", url: "https://media-ssl.musicradio.com/CapitalUK" },
-  { name: "Heart London", genre: "Pop/AC", url: "https://media-ssl.musicradio.com/HeartLondon" },
-  { name: "Virgin Radio UK", genre: "Pop/Rock", url: "https://radio.virginradio.co.uk/stream" },
-  { name: "The Mix", genre: "Adult Hits", url: "https://listen.181fm.com/181-themix_128k.mp3" },
-  { name: "UK Top 40", genre: "UK Charts", url: "https://listen.181fm.com/181-uktop40_128k.mp3" },
-
-  // --- 🕰️ 经典怀旧 (Oldies) ---
-  { name: "Awesome 80s", genre: "80s Hits", url: "https://listen.181fm.com/181-awesome80s_128k.mp3" },
-  { name: "Star 90s", genre: "90s Hits", url: "https://listen.181fm.com/181-star90s_128k.mp3" },
-  { name: "Good Time Oldies", genre: "50s/60s", url: "https://listen.181fm.com/181-goodtime_128k.mp3" },
-  { name: "Beatles Radio", genre: "The Beatles", url: "https://stream.zeno.fm/v3p69335228uv" },
-  { name: "Classic Hits 181", genre: "Classic Hits", url: "https://listen.181fm.com/181-classichits_128k.mp3" },
+  // --- 🎸 摇滚/另类 (Rock & Alternative) ---
+  { name: "Classic Rock Florida", genre: "Classic Rock", url: "https://us4.internet-radio.com/proxy/classicrockflorida?mp=/stream" },
+  { name: "Radio X UK", genre: "Alternative", url: "https://media-ssl.musicradio.com/RadioXUK" },
+  { name: "KEXP Seattle", genre: "Indie/Rock", url: "https://kexp-mp3-128.streamguys1.com/kexp128.mp3" },
+  { name: "The Eagle", genre: "Classic Rock", url: "https://listen.181fm.com/181-eagle_128k.mp3" },
+  { name: "Hard Rock Heaven", genre: "Hard Rock", url: "https://listen.181fm.com/181-hardrock_128k.mp3" },
 
   // --- 🎷 爵士/古典 (Jazz & Classical) ---
   { name: "Jazz24", genre: "Jazz", url: "https://live.wostreaming.net/direct/ppm-jazz24aac-ibc1" },
@@ -71,17 +69,30 @@ const STATIONS = [
   { name: "Venice Classic", genre: "Classical", url: "https://uk2.internet-radio.com/proxy/vcr1?mp=/stream" },
   { name: "Swiss Classic", genre: "Classical", url: "https://stream.srg-ssr.ch/m/rsc_de/mp3_128" },
   { name: "WQXR 105.9", genre: "Classical NY", url: "https://stream.wqxr.org/wqxr" },
+  { name: "Whisperings", genre: "Solo Piano", url: "https://pianosolo.stream.publicradio.org/pianosolo.mp3" },
 
-  // --- 🎸 摇滚/另类 (Rock) ---
-  { name: "Classic Rock Florida", genre: "Classic Rock", url: "https://us4.internet-radio.com/proxy/classicrockflorida?mp=/stream" },
-  { name: "The Eagle", genre: "Classic Rock", url: "https://listen.181fm.com/181-eagle_128k.mp3" },
-  { name: "Hard Rock Heaven", genre: "Hard Rock", url: "https://listen.181fm.com/181-hardrock_128k.mp3" },
-  { name: "Radio X UK", genre: "Alternative", url: "https://media-ssl.musicradio.com/RadioXUK" },
-
-  // --- 🌍 其他风格 (Misc) ---
-  { name: "Disney Hits", genre: "Kids", url: "https://streaming.radio.co/s5d59529b4/listen" },
+  // --- 🎤 嘻哈/R&B (Hip-Hop & R&B) ---
+  { name: "The Beat (181.fm)", genre: "HipHop/R&B", url: "https://listen.181fm.com/181-beat_128k.mp3" },
+  { name: "Old School HipHop", genre: "Old School", url: "https://listen.181fm.com/181-oldschool_128k.mp3" },
+  
+  // --- 🤠 乡村/民谣 (Country & Folk) ---
+  { name: "Kickin' Country", genre: "Country", url: "https://listen.181fm.com/181-kickincountry_128k.mp3" },
   { name: "Highway 181", genre: "Country", url: "https://listen.181fm.com/181-highway_128k.mp3" },
-  { name: "Old School HipHop", genre: "HipHop", url: "https://listen.181fm.com/181-oldschool_128k.mp3" }
+
+  // --- 📰 新闻/资讯 (News & Talk) ---
+  { name: "BBC World Service", genre: "Global News", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service" },
+  { name: "Bloomberg Radio", genre: "Finance", url: "https://live.wostreaming.net/direct/bloomberg-bloombergradio-mp3" },
+  { name: "LBC UK", genre: "Talk", url: "https://media-ssl.musicradio.com/LBCUK" },
+  { name: "Monocle 24", genre: "Culture", url: "https://radio.monocle.com/live" },
+
+  // --- 🎧 电子/舞曲 (Electronic) ---
+  { name: "Ibiza Global Radio", genre: "House", url: "https://listenssl.ibizaglobalradio.com:8024/ibizaglobalradio.mp3" },
+  { name: "Defected Radio", genre: "House", url: "https://26683.live.streamtheworld.com/DEFECTEDRADIO_SC" },
+  { name: "SomaFM: Secret Agent", genre: "Downtempo", url: "https://ice1.somafm.com/secretagent-128-mp3" },
+
+  // --- 🌍 其他 (Misc) ---
+  { name: "NASA Radio", genre: "Space", url: "https://thirdrock.streamguys1.com/thirdrock.mp3" },
+  { name: "Disney Hits", genre: "Kids", url: "https://streaming.radio.co/s5d59529b4/listen" }
 ];
 
 export default function App() {
