@@ -11,7 +11,7 @@ const STATIONS = [
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
 
   // --- 🇰🇷 韩国流行 (K-Pop) ---
-  { name: "Big B Radio - KPOP", genre: "K-Pop Hits", url: "https://stream.bigbradio.net/kpop" },
+  { name: "K-Pop Gayo", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
   
   // --- 🇯🇵 日本流行/动漫 (J-Pop & Anime) ---
   { name: "Listen.moe (J-Pop)", genre: "J-Pop/Anime", url: "https://listen.moe/stream" },
