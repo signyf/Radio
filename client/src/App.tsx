@@ -5,48 +5,59 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// --- 📻 30个全球精选 HTTPS 高稳电台 ---
-// 均筛选自支持 SSL/HTTPS 的大牌流媒体服务器 (Icecast/Shoutcast)
+// --- 📻 41个全球精选 HTTPS 高稳电台 ---
 const STATIONS = [
-  // --- 🌏 亚洲/华语 ---
-  { name: "Apple FM (Hong Kong)", genre: "Mandopop", url: "https://janus.cdnstream1.com/appleradio" },
+  // --- 🇰🇷 K-Pop (韩国流行) ---
+  { name: "Big B Radio - KPOP", genre: "K-Pop Hits", url: "https://stream.bigbradio.net/kpop" },
   { name: "K-Pop Gayo", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
-  { name: "Asia Hits", genre: "Asian Mix", url: "https://jenny.torontocast.com:8134/stream" },
+  { name: "Aewen Radio (K-Pop)", genre: "K-Pop", url: "https://aewen.com/kpop-mobile" },
+  { name: "Kpopway Radio", genre: "K-Pop/OST", url: "https://radio.kpopway.com/stream" }, 
+  { name: "Korean Pop", genre: "K-Pop", url: "https://stream.zeno.fm/4q553930808uv" },
+
+  // --- 🇯🇵 J-Pop/Anime (日本流行/动漫) ---
+  { name: "Big B Radio - JPOP", genre: "J-Pop Hits", url: "https://stream.bigbradio.net/jpop" },
+  { name: "Listen.moe (J-Pop)", genre: "J-Pop/Anime", url: "https://listen.moe/stream" },
   { name: "J-Pop Powerplay", genre: "J-Pop", url: "https://kathy.torontocast.com:3060/;" },
-  
-  // --- ☕ 氛围/专注 ---
-  { name: "Lofi Girl Radio", genre: "Lo-Fi", url: "https://play.streamafrica.net/lofigirl" }, // 备用高可用流
-  { name: "SomaFM: Groove Salad", genre: "Ambient", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
-  { name: "Radio Paradise", genre: "Eclectic", url: "https://stream.radioparadise.com/mp3-128" },
-  { name: "Radio Paradise Mellow", genre: "Chill", url: "https://stream.radioparadise.com/mellow-128" },
-  { name: "Smooth Chill", genre: "Chillout", url: "https://media-ssl.musicradio.com/SmoothChill" },
-  
-  // --- 🇺🇸/🇬🇧 欧美流行 ---
+  { name: "AnimeNfo Radio", genre: "Anime OST", url: "https://momori.animenfo.com:8000/stream" },
+  { name: "Japan Hits", genre: "J-Pop", url: "https://igor.torontocast.com:1025/;" },
+
+  // --- 🇭🇰/🇨🇳 中文精选 (Chinese/HK) ---
+  { name: "RTHK Radio 1 (香港)", genre: "News/Talk", url: "https://stm1.rthk.hk/radio1" }, 
+  { name: "RTHK Radio 2 (香港)", genre: "CantoPop", url: "https://stm1.rthk.hk/radio2" }, 
+  { name: "Apple FM (香港)", genre: "Mandopop", url: "https://janus.cdnstream1.com/appleradio" }, 
+  { name: "181.fm Chinese", genre: "Chinese Pop", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" }, 
+  { name: "Asia Hits", genre: "Asian Mix", url: "https://jenny.torontocast.com:8134/stream" },
+
+  // --- 🇺🇸/🇬🇧 欧美流行 (Western Hits) ---
   { name: "Capital FM London", genre: "Top 40", url: "https://media-ssl.musicradio.com/CapitalUK" },
   { name: "Heart London", genre: "Pop/AC", url: "https://media-ssl.musicradio.com/HeartLondon" },
   { name: "Virgin Radio UK", genre: "Pop/Rock", url: "https://radio.virginradio.co.uk/stream" },
   { name: "Power 181", genre: "Top 40", url: "https://listen.181fm.com/181-power_128k.mp3" },
   { name: "HITS 105", genre: "Hits", url: "https://ais-sa1.streamon.fm/7005_64k.mp3" },
+
+  // --- ☕ 氛围/专注 (Chill & Focus) ---
+  { name: "Lofi Girl Radio", genre: "Lo-Fi", url: "https://play.streamafrica.net/lofigirl" },
+  { name: "SomaFM: Groove Salad", genre: "Ambient", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
+  { name: "Radio Paradise", genre: "Eclectic", url: "https://stream.radioparadise.com/mp3-128" },
+  { name: "Radio Paradise Mellow", genre: "Chill", url: "https://stream.radioparadise.com/mellow-128" },
+  { name: "Smooth Chill", genre: "Chillout", url: "https://media-ssl.musicradio.com/SmoothChill" },
   
-  // --- 🎷 爵士/古典 ---
+  // --- 🎷 爵士/古典 (Jazz & Classical) ---
   { name: "Jazz24", genre: "Jazz", url: "https://live.wostreaming.net/direct/ppm-jazz24aac-ibc1" },
   { name: "Linn Jazz", genre: "Audiophile", url: "https://radio.linn.co.uk/radio/jazz/playlist.m3u" }, 
   { name: "Classic FM", genre: "Classical", url: "https://media-ssl.musicradio.com/ClassicFM" },
   { name: "Venice Classic", genre: "Classical", url: "https://uk2.internet-radio.com/proxy/vcr1?mp=/stream" },
-  { name: "Swiss Classic", genre: "Classical", url: "https://stream.srg-ssr.ch/m/rsc_de/mp3_128" },
 
-  // --- 📰 新闻/资讯 ---
+  // --- 📰 新闻/资讯 (News) ---
   { name: "BBC World Service", genre: "News", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service" },
-  { name: "LBC UK", genre: "Talk", url: "https://media-ssl.musicradio.com/LBCUK" },
-  { name: "NPR News", genre: "News", url: "https://npr-ice.streamguys1.com/live.mp3" },
   { name: "Bloomberg Radio", genre: "Finance", url: "https://live.wostreaming.net/direct/bloomberg-bloombergradio-mp3" },
 
-  // --- 🎧 电子/舞曲 ---
+  // --- 🎧 电子/舞曲 (Electronic) ---
   { name: "Ibiza Global Radio", genre: "House", url: "https://listenssl.ibizaglobalradio.com:8024/ibizaglobalradio.mp3" },
   { name: "Defected Radio", genre: "House", url: "https://26683.live.streamtheworld.com/DEFECTEDRADIO_SC" },
   { name: "SomaFM: Secret Agent", genre: "Downtempo", url: "https://ice1.somafm.com/secretagent-128-mp3" },
 
-  // --- 🌍 其他 ---
+  // --- 🌍 其他 (Misc) ---
   { name: "NASA Radio", genre: "Space", url: "https://thirdrock.streamguys1.com/thirdrock.mp3" },
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
   { name: "Disney Hits", genre: "Kids", url: "https://streaming.radio.co/s5d59529b4/listen" }
@@ -83,7 +94,7 @@ export default function App() {
   useEffect(() => {
     if (!audioRef.current) {
       audioRef.current = new Audio();
-      audioRef.current.preload = "none"; // 初始不加载，节省流量
+      audioRef.current.preload = "none"; // 节省流量
     }
 
     const audio = audioRef.current;
@@ -95,7 +106,7 @@ export default function App() {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         if (isLoading) {
-          handleError("连接超时");
+          handleError("连接超时，切换下一台");
         }
       }, 12000);
     };
@@ -108,7 +119,6 @@ export default function App() {
     };
 
     const handleCanPlay = () => {
-      // 只要能播放，就取消加载状态
       setIsLoading(false);
     };
     
@@ -116,7 +126,7 @@ export default function App() {
     const handleError = (e: any) => {
       console.warn("Stream failed, skipping:", STATIONS[currentStationIndex].name);
       setIsLoading(false);
-      setError("信号弱，正在搜索下一个频道...");
+      setError("信号弱，正在搜索...");
       
       // 1.5秒后自动切换到下一首
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -138,12 +148,11 @@ export default function App() {
       audio.removeEventListener('canplay', handleCanPlay);
       audio.removeEventListener('error', handleError);
     };
-  }, [currentStationIndex]); // 依赖 currentStationIndex 确保闭包中拿到最新 index
+  }, [currentStationIndex]); 
 
   // 切换频道逻辑
   useEffect(() => {
     if (audioRef.current) {
-      // 重置状态
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsLoading(true);
       setError(null);
@@ -151,25 +160,22 @@ export default function App() {
       audioRef.current.src = STATIONS[currentStationIndex].url;
       audioRef.current.volume = isMuted ? 0 : volume;
       
-      // 只有在已经是播放状态，或者初次点击后才自动播放
       if (isPlaying) {
         const playPromise = audioRef.current.play();
         if (playPromise !== undefined) {
           playPromise
             .catch((err) => {
               console.error("Autoplay prevent:", err);
-              // 某些浏览器策略可能会拦截，如果拦截则停止播放状态
               setIsPlaying(false);
               setIsLoading(false);
             });
         }
       } else {
-        setIsLoading(false); // 如果没在播放，就不转圈
+        setIsLoading(false);
       }
     }
   }, [currentStationIndex]);
 
-  // 音量控制
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.volume = isMuted ? 0 : volume;
@@ -194,7 +200,7 @@ export default function App() {
             console.error("Manual play failed:", err);
             setIsPlaying(false);
             setIsLoading(false);
-            setError("无法播放，请尝试其他频道");
+            setError("无法播放，请重试");
           });
       }
     }
@@ -202,7 +208,7 @@ export default function App() {
 
   const nextChannel = () => {
     setCurrentStationIndex((prev) => (prev + 1) % STATIONS.length);
-    setIsPlaying(true); // 切换意味着用户想听，强制设为播放态
+    setIsPlaying(true); 
   };
 
   const prevChannel = () => {
