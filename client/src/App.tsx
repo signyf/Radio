@@ -5,61 +5,63 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// --- 📻 56个全球精选 HTTPS 高稳电台 ---
+// --- 📻 56个全球精选电台 (中国网络优化版) ---
+// 筛选标准：HTTPS + 音乐为主 (避开新闻台) + 常用流媒体协议
 const STATIONS = [
   // --- 🌟 特别推荐 (Featured) ---
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
 
-  // --- 🇰🇷 韩国流行 (K-Pop) ---
-  { name: "Big B Radio - KPOP", genre: "K-Pop Hits", url: "https://stream.bigbradio.net/kpop" },
-  { name: "K-Pop Gayo", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
+  // --- 🇨🇳/🇭🇰/🇹🇼 华语精选 (Chinese Pop) ---
+  { name: "Apple FM (香港)", genre: "Mandopop", url: "https://janus.cdnstream1.com/appleradio" },
+  { name: "RTHK Radio 1 (香港)", genre: "Cantonese", url: "https://stm1.rthk.hk/radio1" }, 
+  { name: "RTHK Radio 2 (香港)", genre: "CantoPop", url: "https://stm1.rthk.hk/radio2" },
+  { name: "Hit FM (台湾)", genre: "Mandopop", url: "https://stream.rcs.revma.com/k53q2312w98uv" },
+  { name: "181.fm Chinese", genre: "Chinese Pop", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" },
+  { name: "Asia Hits", genre: "Asian Mix", url: "https://jenny.torontocast.com:8134/stream" },
+  { name: "Chinese Music World", genre: "Classic", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" },
+  { name: "D100 PBS", genre: "Talk/Music", url: "https://zv.d100.net/pbs.mp3" },
+  { name: "CNR-1 (央广之声)", genre: "News", url: "https://lhttp.qtfm.cn/live/499/64k.mp3" }, // 尝试添加一个国内HTTPS源(如果可用)
+  
+  // --- 🇯🇵/🇰🇷 日韩流行 (J-Pop & K-Pop) ---
+  { name: "Big B Radio - KPOP", genre: "K-Pop", url: "https://stream.bigbradio.net/kpop" },
+  { name: "Listen.moe (K-Pop)", genre: "K-Pop", url: "https://listen.moe/kpop/stream" },
   { name: "Kpopway Radio", genre: "K-Pop", url: "https://icecast.kpopway.com:8000/stream" },
   { name: "Generasi KPOP", genre: "K-Pop", url: "https://stream.zeno.fm/r3k1mv0q208uv" },
-  { name: "Seoul Community Radio", genre: "Underground", url: "https://seoulcommunityradio.out.airtime.pro/seoulcommunityradio_a" },
-
-  // --- 🇯🇵 日本流行/动漫 (J-Pop & Anime) ---
+  { name: "Big B Radio - JPOP", genre: "J-Pop", url: "https://stream.bigbradio.net/jpop" },
   { name: "Listen.moe (J-Pop)", genre: "J-Pop/Anime", url: "https://listen.moe/stream" },
-  { name: "Big B Radio - JPOP", genre: "J-Pop Hits", url: "https://stream.bigbradio.net/jpop" },
   { name: "Vocaloid Radio", genre: "Vocaloid", url: "https://curtis.torontocast.com:2096/stream" },
   { name: "AnimeNfo Radio", genre: "Anime OST", url: "https://momori.animenfo.com:8000/stream" },
   { name: "Japan Hits", genre: "J-Pop", url: "https://igor.torontocast.com:1025/;" },
+  { name: "J-Idols Project", genre: "Idols", url: "https://kathy.torontocast.com:3560/;" },
 
-  // --- 🇭🇰/🇨🇳 中文精选 (Chinese) ---
-  { name: "RTHK Radio 1 (香港)", genre: "Cantonese", url: "https://stm1.rthk.hk/radio1" }, 
-  { name: "RTHK Radio 2 (香港)", genre: "CantoPop", url: "https://stm1.rthk.hk/radio2" }, 
-  { name: "Apple FM (香港)", genre: "Mandopop", url: "https://janus.cdnstream1.com/appleradio" }, 
-  { name: "181.fm Chinese", genre: "Chinese Pop", url: "https://listen.181fm.com/181-chinesemusic_128k.mp3" }, 
-  { name: "Asia Hits", genre: "Asian Mix", url: "https://jenny.torontocast.com:8134/stream" },
-
-  // --- 🇺🇸/🇬🇧 欧美流行 (Top 40 & Hits) ---
-  { name: "Capital FM London", genre: "Top 40", url: "https://media-ssl.musicradio.com/CapitalUK" },
-  { name: "Heart London", genre: "Pop/AC", url: "https://media-ssl.musicradio.com/HeartLondon" },
-  { name: "Virgin Radio UK", genre: "Pop/Rock", url: "https://radio.virginradio.co.uk/stream" },
-  { name: "Power 181", genre: "Top 40", url: "https://listen.181fm.com/181-power_128k.mp3" },
-  { name: "HITS 105", genre: "Hits", url: "https://ais-sa1.streamon.fm/7005_64k.mp3" },
-  { name: "100hitz - Hot Hitz", genre: "Hot Hits", url: "https://pureplay.cdnstream1.com/6050_64.aac" },
-
-  // --- 🕰️ 怀旧金曲 (Retro & Oldies) ---
-  { name: "Awesome 80s", genre: "80s Hits", url: "https://listen.181fm.com/181-awesome80s_128k.mp3" },
-  { name: "Star 90s", genre: "90s Hits", url: "https://listen.181fm.com/181-star90s_128k.mp3" },
-  { name: "Gold Radio UK", genre: "Oldies", url: "https://media-ssl.musicradio.com/Gold" },
-  { name: "Beatles Radio", genre: "The Beatles", url: "https://stream.zeno.fm/v3p69335228uv" },
-
-  // --- ☕ 氛围/专注 (Chill & Lo-Fi) ---
+  // --- ☕ 专注/放松 (Chill/Lo-Fi/Ambient) ---
   { name: "Lofi Girl Radio", genre: "Lo-Fi", url: "https://play.streamafrica.net/lofigirl" },
   { name: "SomaFM: Groove Salad", genre: "Ambient", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
   { name: "Radio Paradise", genre: "Eclectic", url: "https://stream.radioparadise.com/mp3-128" },
   { name: "Radio Paradise Mellow", genre: "Chill", url: "https://stream.radioparadise.com/mellow-128" },
   { name: "Smooth Chill", genre: "Chillout", url: "https://media-ssl.musicradio.com/SmoothChill" },
-  { name: "SomaFM: Deep Space", genre: "Drone/Space", url: "https://ice1.somafm.com/deepspaceone-128-mp3" },
+  { name: "SomaFM: Deep Space", genre: "Space/Drone", url: "https://ice1.somafm.com/deepspaceone-128-mp3" },
   { name: "Sleep Radio", genre: "Sleep", url: "https://streams.ilovemusic.de/iloveradio17.mp3" },
+  { name: "Birdsong FM", genre: "Nature", url: "https://stream.zeno.fm/9k928923308uv" }, // Fallback nature
+  { name: "Costa Del Mar", genre: "Chillout", url: "https://stream.zeno.fm/f3wvbbqmdg8uv" }, // Chillhop backup
+  { name: "Piano Solo", genre: "Piano", url: "https://pianosolo.stream.publicradio.org/pianosolo.mp3" },
 
-  // --- 🎸 摇滚/另类 (Rock & Alternative) ---
-  { name: "Classic Rock Florida", genre: "Classic Rock", url: "https://us4.internet-radio.com/proxy/classicrockflorida?mp=/stream" },
-  { name: "Radio X UK", genre: "Alternative", url: "https://media-ssl.musicradio.com/RadioXUK" },
-  { name: "KEXP Seattle", genre: "Indie/Rock", url: "https://kexp-mp3-128.streamguys1.com/kexp128.mp3" },
-  { name: "The Eagle", genre: "Classic Rock", url: "https://listen.181fm.com/181-eagle_128k.mp3" },
-  { name: "Hard Rock Heaven", genre: "Hard Rock", url: "https://listen.181fm.com/181-hardrock_128k.mp3" },
+  // --- 🇺🇸/🇬🇧 欧美流行 (Western Hits) ---
+  { name: "Power 181", genre: "Top 40", url: "https://listen.181fm.com/181-power_128k.mp3" },
+  { name: "HITS 105", genre: "Hits", url: "https://ais-sa1.streamon.fm/7005_64k.mp3" },
+  { name: "100hitz - Hot Hitz", genre: "Hot Hits", url: "https://pureplay.cdnstream1.com/6050_64.aac" },
+  { name: "Capital FM London", genre: "Top 40", url: "https://media-ssl.musicradio.com/CapitalUK" },
+  { name: "Heart London", genre: "Pop/AC", url: "https://media-ssl.musicradio.com/HeartLondon" },
+  { name: "Virgin Radio UK", genre: "Pop/Rock", url: "https://radio.virginradio.co.uk/stream" },
+  { name: "The Mix", genre: "Adult Hits", url: "https://listen.181fm.com/181-themix_128k.mp3" },
+  { name: "UK Top 40", genre: "UK Charts", url: "https://listen.181fm.com/181-uktop40_128k.mp3" },
+
+  // --- 🕰️ 经典怀旧 (Oldies) ---
+  { name: "Awesome 80s", genre: "80s Hits", url: "https://listen.181fm.com/181-awesome80s_128k.mp3" },
+  { name: "Star 90s", genre: "90s Hits", url: "https://listen.181fm.com/181-star90s_128k.mp3" },
+  { name: "Good Time Oldies", genre: "50s/60s", url: "https://listen.181fm.com/181-goodtime_128k.mp3" },
+  { name: "Beatles Radio", genre: "The Beatles", url: "https://stream.zeno.fm/v3p69335228uv" },
+  { name: "Classic Hits 181", genre: "Classic Hits", url: "https://listen.181fm.com/181-classichits_128k.mp3" },
 
   // --- 🎷 爵士/古典 (Jazz & Classical) ---
   { name: "Jazz24", genre: "Jazz", url: "https://live.wostreaming.net/direct/ppm-jazz24aac-ibc1" },
@@ -69,30 +71,17 @@ const STATIONS = [
   { name: "Venice Classic", genre: "Classical", url: "https://uk2.internet-radio.com/proxy/vcr1?mp=/stream" },
   { name: "Swiss Classic", genre: "Classical", url: "https://stream.srg-ssr.ch/m/rsc_de/mp3_128" },
   { name: "WQXR 105.9", genre: "Classical NY", url: "https://stream.wqxr.org/wqxr" },
-  { name: "Whisperings", genre: "Solo Piano", url: "https://pianosolo.stream.publicradio.org/pianosolo.mp3" },
 
-  // --- 🎤 嘻哈/R&B (Hip-Hop & R&B) ---
-  { name: "The Beat (181.fm)", genre: "HipHop/R&B", url: "https://listen.181fm.com/181-beat_128k.mp3" },
-  { name: "Old School HipHop", genre: "Old School", url: "https://listen.181fm.com/181-oldschool_128k.mp3" },
-  
-  // --- 🤠 乡村/民谣 (Country & Folk) ---
-  { name: "Kickin' Country", genre: "Country", url: "https://listen.181fm.com/181-kickincountry_128k.mp3" },
+  // --- 🎸 摇滚/另类 (Rock) ---
+  { name: "Classic Rock Florida", genre: "Classic Rock", url: "https://us4.internet-radio.com/proxy/classicrockflorida?mp=/stream" },
+  { name: "The Eagle", genre: "Classic Rock", url: "https://listen.181fm.com/181-eagle_128k.mp3" },
+  { name: "Hard Rock Heaven", genre: "Hard Rock", url: "https://listen.181fm.com/181-hardrock_128k.mp3" },
+  { name: "Radio X UK", genre: "Alternative", url: "https://media-ssl.musicradio.com/RadioXUK" },
+
+  // --- 🌍 其他风格 (Misc) ---
+  { name: "Disney Hits", genre: "Kids", url: "https://streaming.radio.co/s5d59529b4/listen" },
   { name: "Highway 181", genre: "Country", url: "https://listen.181fm.com/181-highway_128k.mp3" },
-
-  // --- 📰 新闻/资讯 (News & Talk) ---
-  { name: "BBC World Service", genre: "Global News", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service" },
-  { name: "Bloomberg Radio", genre: "Finance", url: "https://live.wostreaming.net/direct/bloomberg-bloombergradio-mp3" },
-  { name: "LBC UK", genre: "Talk", url: "https://media-ssl.musicradio.com/LBCUK" },
-  { name: "Monocle 24", genre: "Culture", url: "https://radio.monocle.com/live" },
-
-  // --- 🎧 电子/舞曲 (Electronic) ---
-  { name: "Ibiza Global Radio", genre: "House", url: "https://listenssl.ibizaglobalradio.com:8024/ibizaglobalradio.mp3" },
-  { name: "Defected Radio", genre: "House", url: "https://26683.live.streamtheworld.com/DEFECTEDRADIO_SC" },
-  { name: "SomaFM: Secret Agent", genre: "Downtempo", url: "https://ice1.somafm.com/secretagent-128-mp3" },
-
-  // --- 🌍 其他 (Misc) ---
-  { name: "NASA Radio", genre: "Space", url: "https://thirdrock.streamguys1.com/thirdrock.mp3" },
-  { name: "Disney Hits", genre: "Kids", url: "https://streaming.radio.co/s5d59529b4/listen" }
+  { name: "Old School HipHop", genre: "HipHop", url: "https://listen.181fm.com/181-oldschool_128k.mp3" }
 ];
 
 export default function App() {
@@ -137,7 +126,7 @@ export default function App() {
         if (isLoading) {
           handleError("连接超时，切换下一台");
         }
-      }, 12000);
+      }, 10000); // 10秒超时
     };
 
     const handlePlaying = () => {
@@ -154,7 +143,7 @@ export default function App() {
     const handleError = (e: any) => {
       console.warn("Stream failed, skipping:", STATIONS[currentStationIndex].name);
       setIsLoading(false);
-      setError("信号弱，正在搜索...");
+      setError("信号弱，自动切台...");
       
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
@@ -253,9 +242,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans flex flex-col items-center relative overflow-hidden select-none">
       
+      {/* 氛围背景 */}
       <div className="absolute top-[-20%] left-[-20%] w-[140%] h-[60%] bg-indigo-900/30 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[100%] h-[50%] bg-fuchsia-900/20 blur-[100px] rounded-full pointer-events-none"></div>
 
+      {/* 顶部栏 */}
       <div className="w-full max-w-md p-6 flex justify-between items-center z-10">
         <div className="flex items-center gap-2 text-indigo-400">
           <Radio size={20} className={isPlaying ? "animate-pulse" : ""} />
@@ -269,8 +260,10 @@ export default function App() {
         </button>
       </div>
 
+      {/* 主体内容 */}
       <main className="flex-1 w-full max-w-md flex flex-col items-center justify-center p-6 gap-8 z-10 relative">
         
+        {/* 频道列表 */}
         {showList && (
           <div className="absolute inset-0 bg-slate-900/98 backdrop-blur-xl z-30 rounded-xl flex flex-col p-4 animate-in fade-in zoom-in-95 duration-200 border border-slate-800">
             <div className="flex justify-between items-center mb-4 pb-2 border-b border-slate-800">
@@ -299,13 +292,16 @@ export default function App() {
           </div>
         )}
 
+        {/* 唱片动画区域 */}
         <div className="relative group">
           <div className={`w-72 h-72 rounded-full border-4 border-slate-800/50 bg-slate-950 shadow-2xl flex items-center justify-center relative overflow-hidden transition-all duration-700 ${isPlaying ? 'shadow-indigo-500/20' : ''}`}>
+            {/* 旋转底盘 */}
             <div className={`absolute inset-0 rounded-full bg-[conic-gradient(from_0deg,#0f172a,#1e293b,#0f172a)] ${isPlaying && !isLoading ? 'animate-[spin_6s_linear_infinite]' : ''}`}></div>
             {[...Array(3)].map((_, i) => (
                <div key={i} className={`absolute inset-${(i+1)*8} rounded-full border border-slate-800/20 opacity-30`}></div>
             ))}
             
+            {/* 专辑封面/中心 */}
             <div className="absolute inset-0 m-auto w-32 h-32 rounded-full bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center shadow-inner z-10">
                {isLoading ? (
                  <Loader2 size={40} className="text-white/80 animate-spin" />
@@ -317,6 +313,7 @@ export default function App() {
             </div>
           </div>
           
+          {/* 唱针 */}
           <div className={`absolute -top-4 -right-4 w-24 h-32 origin-top-right transition-transform duration-700 ease-in-out pointer-events-none ${isPlaying ? 'rotate-12' : '-rotate-12'}`}>
              <div className="w-2 h-24 bg-slate-700 absolute right-4 rounded-full shadow-lg"></div>
              <div className="w-4 h-4 bg-slate-500 absolute top-0 right-3 rounded-full"></div>
@@ -324,6 +321,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* 状态信息 */}
         <div className="text-center space-y-2 w-full px-4 h-24 flex flex-col justify-center">
           <div className="flex justify-center">
              <span className={`text-[10px] font-bold tracking-widest uppercase py-1 px-3 rounded-full transition-colors duration-300 ${
@@ -351,6 +349,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* 控制面板 */}
         <div className="w-full bg-slate-900/60 backdrop-blur-xl rounded-3xl p-6 border border-slate-800 shadow-xl">
           <div className="flex justify-between items-center mb-6">
             <button onClick={prevChannel} className="p-4 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition-all active:scale-95">
