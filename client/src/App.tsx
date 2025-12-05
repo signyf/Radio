@@ -5,7 +5,10 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// --- 📻 全球精选电台 (您指定的列表) ---
+// ✅ 【修改点 1】定义你的 VPS 中转前缀
+const RELAY_PREFIX = "https://vip.radio11.online/relay/";
+
+// --- 📻 全球精选电台 ---
 const STATIONS = [
   // --- 🌟 特别推荐 (Featured) ---
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
@@ -150,13 +153,19 @@ export default function App() {
     };
   }, [currentStationIndex]); 
 
+  // ✅ 【修改点 2】在这里自动拼接 RELAY_PREFIX + 原始 URL
   useEffect(() => {
     if (audioRef.current) {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsLoading(true);
       setError(null);
       
-      audioRef.current.src = STATIONS[currentStationIndex].url;
+      // 获取原始链接
+      const originalUrl = STATIONS[currentStationIndex].url;
+      
+      // 核心修改：强制让 audio 播放带有中转前缀的链接
+      audioRef.current.src = `${RELAY_PREFIX}${originalUrl}`;
+      
       audioRef.current.volume = isMuted ? 0 : volume;
       
       if (isPlaying) {
