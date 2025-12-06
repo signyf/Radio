@@ -5,11 +5,11 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// ✅ 【核心修改】Cloudflare Worker 加速前缀
-// 你的 Worker 路由配置为 vip.radio11.online/relay
+// ✅ 【核心修改】这里填你的 VPS 域名对应的 Worker 路径
+// 你的主站是 www，这里用 vip 做加速通道
 const WORKER_PREFIX = "https://vip.radio11.online/relay?url=";
 
-// --- 📻 全球精选电台 (列表保持原样，无需手动修改 URL) ---
+// --- 📻 全球精选电台 (列表保持原样) ---
 const STATIONS = [
   // --- 🌟 特别推荐 (Featured) ---
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
@@ -114,7 +114,7 @@ export default function App() {
         if (isLoading) {
           handleError("连接超时，切换下一台");
         }
-      }, 15000); // ✅ 改为 15秒超时，给 Worker 更多时间
+      }, 15000); // 15秒超时，给 Worker 足够时间
     };
 
     const handlePlaying = () => {
@@ -154,7 +154,7 @@ export default function App() {
     };
   }, [currentStationIndex]); 
 
-  // ✅ 【核心修改】自动使用 Worker 加速
+  // ✅ 【关键逻辑】自动拼接 Worker 地址 + 原始链接
   useEffect(() => {
     if (audioRef.current) {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -164,8 +164,8 @@ export default function App() {
       // 获取原始链接
       const originalUrl = STATIONS[currentStationIndex].url;
       
-      // ✅ 拼接 Worker 地址 + 编码后的原始链接
-      // encodeURIComponent 是为了处理 URL 中的特殊符号（如 & ?）
+      // 拼接 Worker 代理前缀
+      // 使用 encodeURIComponent 保证特殊字符被正确处理
       audioRef.current.src = `${WORKER_PREFIX}${encodeURIComponent(originalUrl)}`;
       
       audioRef.current.volume = isMuted ? 0 : volume;
