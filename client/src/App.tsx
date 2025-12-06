@@ -5,7 +5,11 @@ import {
 } from 'lucide-react';
 import sdk from '@farcaster/frame-sdk';
 
-// --- 📻 全球精选电台 (您指定的列表) ---
+// ✅ 【核心修改】Cloudflare Worker 加速前缀
+// 你的 Worker 路由配置为 vip.radio11.online/relay
+const WORKER_PREFIX = "https://vip.radio11.online/relay?url=";
+
+// --- 📻 全球精选电台 (列表保持原样，无需手动修改 URL) ---
 const STATIONS = [
   // --- 🌟 特别推荐 (Featured) ---
   { name: "Reggae 141", genre: "Reggae", url: "https://listen.181fm.com/181-reggae_128k.mp3" },
@@ -110,7 +114,7 @@ export default function App() {
         if (isLoading) {
           handleError("连接超时，切换下一台");
         }
-      }, 10000); // 10秒超时
+      }, 15000); // ✅ 改为 15秒超时，给 Worker 更多时间
     };
 
     const handlePlaying = () => {
@@ -150,13 +154,20 @@ export default function App() {
     };
   }, [currentStationIndex]); 
 
+  // ✅ 【核心修改】自动使用 Worker 加速
   useEffect(() => {
     if (audioRef.current) {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsLoading(true);
       setError(null);
       
-      audioRef.current.src = STATIONS[currentStationIndex].url;
+      // 获取原始链接
+      const originalUrl = STATIONS[currentStationIndex].url;
+      
+      // ✅ 拼接 Worker 地址 + 编码后的原始链接
+      // encodeURIComponent 是为了处理 URL 中的特殊符号（如 & ?）
+      audioRef.current.src = `${WORKER_PREFIX}${encodeURIComponent(originalUrl)}`;
+      
       audioRef.current.volume = isMuted ? 0 : volume;
       
       if (isPlaying) {
